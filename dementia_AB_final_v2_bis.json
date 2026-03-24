@@ -1,0 +1,2167 @@
+{
+  "name": "Dementia",
+  "remarks": [
+    "right now this is just Alzheimer's but there are other dementias that could be adapted into this model"
+  ],
+  "states": {
+    "Initial": {
+      "type": "Initial",
+      "distributed_transition": [
+        { "distribution": 0.98, "transition": "Assign_APOE_Genotype" },
+        { "distribution": 0.02, "transition": "PreEarlyOnsetAlzheimers" }
+      ],
+      "remarks": [
+        "Alzheimer's has been shown to be significantly based on genetics, and there are specific genes to point to for early-onset:",
+        "https://www.nia.nih.gov/alzheimers/publication/alzheimers-disease-genetics-fact-sheet",
+        "Since Synthea does not currently model at the level of individual genes",
+        "we'll use a simple probability to differentiate the population into who will and won't get alzheimers.",
+        "The 40% chance does seem high, but the key factor here is the delay in when it appears.",
+        "38% of people over age 85 have alzheimer's. ( http://www.alzheimers.net/resources/alzheimers-statistics/ )"
+      ]
+    },
+    
+    "Assign_APOE_Genotype": {
+     "type": "Simple",
+     "conditional_transition": [
+       {"transition": "APOE White", "condition": {"condition_type": "Race", "race": "White"}},
+       {"transition": "APOE Black", "condition": {"condition_type": "Race", "race": "Black"}},
+       {"transition": "APOE Asian", "condition": {"condition_type": "Race", "race": "Asian"}}
+     ]
+    },
+    "APOE White": {
+     "type": "Simple",
+     "distributed_transition": [
+       {"transition": "Set_e2e2", "distribution": 0.0064},
+       {"transition": "Set_e2e3", "distribution": 0.1248},
+       {"transition": "Set_e2e4", "distribution": 0.0224},
+       {"transition": "Set_e3e3", "distribution": 0.6084},
+       {"transition": "Set_e3e4", "distribution": 0.2184},
+       {"transition": "Set_e4e4", "distribution": 0.0196}
+     ],
+     "remarks": [
+      "APOE genotype probabilities vary by ancestry (Zhang et al., 2022; Meliani et al., 2021; Saddiki et al., 2020; Blackman et al., 2022).",
+      "White/European ancestry: ε2 = 0.08, ε3 = 0.78, ε4 = 0.14 ",
+      "Black/Sub-Saharan ancestry: ε2 = 0.10, ε3 = 0.70, ε4 = 0.20",
+      "Asian/East Asian ancestry: ε2 = 0.07, ε3 = 0.82, ε4 = 0.11",
+      "Transition probabilities calculated using Hardy-Weinberg formula."
+      ]
+    },
+    
+   "APOE Black": {
+    "type": "Simple",
+    "distributed_transition": [
+    {"transition": "Set_e2e2", "distribution": 0.0100},
+    {"transition": "Set_e2e3", "distribution": 0.1400},
+    {"transition": "Set_e2e4", "distribution": 0.0400},
+    {"transition": "Set_e3e3", "distribution": 0.4900},
+    {"transition": "Set_e3e4", "distribution": 0.2800},
+    {"transition": "Set_e4e4", "distribution": 0.0400}
+   ]
+  },
+
+
+  "APOE Asian": {
+   "type": "Simple",
+   "distributed_transition": [
+     {"transition": "Set_e2e2", "distribution": 0.0049},
+     {"transition": "Set_e2e3", "distribution": 0.1148},
+     {"transition": "Set_e2e4", "distribution": 0.0154},
+     {"transition": "Set_e3e3", "distribution": 0.6724},
+     {"transition": "Set_e3e4", "distribution": 0.1804},
+     {"transition": "Set_e4e4", "distribution": 0.0121}
+   ]
+  },
+
+  "Set_e2e2": {
+    "type": "SetAttribute", 
+    "attribute": "apoe_genotype", 
+    "value": "e2/e2", 
+    "direct_transition": "APOE_Risk_E2E2"
+   },
+ 
+  "Set_e2e3": {
+    "type": "SetAttribute", 
+    "attribute": "apoe_genotype", 
+    "value": "e2/e3", 
+    "direct_transition": "APOE_Risk_E2E3"
+   },
+ 
+  "Set_e2e4": {
+    "type": "SetAttribute", 
+    "attribute": "apoe_genotype", 
+    "value": "e2/e4", 
+    "direct_transition": "APOE_Risk_E2E4"
+  },
+ 
+  "Set_e3e3": {
+    "type": "SetAttribute", 
+    "attribute": "apoe_genotype", 
+    "value": "e3/e3", 
+    "direct_transition": "APOE_Risk_E3E3"
+  },
+
+  "Set_e3e4": {
+    "type": "SetAttribute", 
+    "attribute": "apoe_genotype", 
+    "value": "e3/e4", 
+    "direct_transition": "APOE_Risk_E3E4"
+  },
+
+  "Set_e4e4": {
+    "type": "SetAttribute", 
+    "attribute": "apoe_genotype", 
+    "value": "e4/e4", 
+    "direct_transition": "APOE_Risk_E4E4"
+  },
+
+  "APOE_Risk_E4E4": {
+    "type": "Simple", 
+    "distributed_transition": [
+	{"distribution": 0.88289, "transition": "PreAlzheimers_E4E4"},
+	{"distribution": 0.11711, "transition": "Terminal"}
+	],
+	 "remarks": [
+    "CALCOLO PROBABILITA' SVILUPPO PATOLOGIA (dati da Farrer et al., 1997):",
+    "ε2/ε2 : ORgene = 0.6, ε2/ε3 : ORgene = 0.6, ε2/ε4 : ORgene = 2.6, ε3/ε4 : ORgene = 3.2 ε4/ε4 : ORgene = 14.9, (ε3/ε3 → ORgene = 1.0, è il riferimento)",
+    "FORMULA:",
+
+    "O = p0/(1-p0)  O = 0.5059569576516891 (per ottenere prevalenza target al 40%)",
+
+    "Ogene = O * ORgene",
+
+    "Pgene = Ogene/(1+Ogene)"
+    ]
+  },
+  "APOE_Risk_E3E4": {
+    "type": "Simple", 
+    "distributed_transition": [
+	{"distribution": 0.61818, "transition": "PreAlzheimers_E3E4"},
+	{"distribution": 0.38182, "transition": "Terminal"}
+	]
+  },
+  "APOE_Risk_E2E4": {
+    "type": "Simple", 
+    "distributed_transition": [
+	{"distribution": 0.56813, "transition": "PreAlzheimers_E2E4"},
+	{"distribution": 0.43187, "transition": "Terminal"}
+	]
+  },
+  "APOE_Risk_E3E3": {
+    "type": "Simple", 
+    "distributed_transition": [
+	{"distribution": 0.33597, "transition": "PreAlzheimers_E3E3"},
+	{"distribution": 0.66403, "transition": "Terminal"}
+	]
+  },
+  "APOE_Risk_E2E3": {
+    "type": "Simple", 
+    "distributed_transition": [
+	{"distribution": 0.23288, "transition": "PreAlzheimers_E2E3"},
+	{"distribution": 0.76712, "transition": "Terminal"}
+	]
+  },
+  "APOE_Risk_E2E2": {
+    "type": "Simple", 
+    "distributed_transition": [
+	{"distribution": 0.23288, "transition": "PreAlzheimers_E2E2"},
+	{"distribution": 0.76712, "transition": "Terminal"}
+	]
+  },
+
+  "PreAlzheimers_E4E4": {
+	"type": "Delay", 
+	"range": {"low": 55, "high": 70, "unit": "years"}, 
+	"conditional_transition": [
+		{
+		   "condition": {"condition_type": "Socioeconomic Status", "category": "High"},
+		   "transition": "EducationDelay_E4E4"
+		},
+		 {"transition": "AlzheimersOnset"}
+		]
+  },
+
+  "EducationDelay_E4E4": {
+	"type": "Delay", 
+	"range": {"low": 2, "high": 5, "unit": "years"}, 
+	"direct_transition": "AlzheimersOnset"
+  },
+
+  "PreAlzheimers_E3E4": {
+	"type": "Delay", 
+	"range": {"low": 62, "high": 75, "unit": "years"}, 
+	"conditional_transition": [
+		{
+			"condition": {"condition_type": "Socioeconomic Status", "category": "High"}, 
+			"transition": "EducationDelay_E3E4"
+		},
+		 {"transition": "AlzheimersOnset"}
+	]
+  },
+  "EducationDelay_E3E4": {
+	"type": "Delay", 
+	"range": {"low": 3, "high": 6, "unit": "years"}, 
+	"direct_transition": "AlzheimersOnset"
+  },
+
+
+  "PreAlzheimers_E2E4": {
+	"type": "Delay", 
+	"range": {"low": 65, "high": 78, "unit": "years"}, 
+	"conditional_transition": [
+		{"condition": {
+			"condition_type": "Socioeconomic Status", "category": "High"}, 
+			"transition": "EducationDelay_E2E4"},
+			{"transition": "AlzheimersOnset"}
+	]
+  },
+  "EducationDelay_E2E4": {
+	"type": "Delay", 
+	"range": {"low": 4, "high": 7, "unit": "years"}, 
+	"direct_transition": "AlzheimersOnset"
+  },
+
+
+  "PreAlzheimers_E3E3": {
+	"type": "Delay", 
+	"range": {"low": 64, "high": 80, "unit": "years"}, 
+	"conditional_transition": [
+		{"condition": {
+			"condition_type": "Socioeconomic Status", "category": "High"}, 
+			"transition": "EducationDelay_E3E3"},
+			{"transition": "AlzheimersOnset"}
+	]
+  },
+  "EducationDelay_E3E3": {
+	"type": "Delay", 
+	"range": {"low": 5, "high": 10, "unit": "years"}, 
+	"direct_transition": "AlzheimersOnset"
+  },
+
+
+  "PreAlzheimers_E2E3": {
+	"type": "Delay", 
+	"range": {"low": 70, "high": 85, "unit": "years"}, 
+	"conditional_transition": [
+		{"condition": {
+			"condition_type": "Socioeconomic Status", "category": "High"}, 
+			"transition": "EducationDelay_E2E3"},
+			{"transition": "AlzheimersOnset"}
+	]
+  },
+  "EducationDelay_E2E3": {
+	"type": "Delay", 
+	"range": {"low": 6, "high": 12, "unit": "years"}, 
+	"direct_transition": "AlzheimersOnset"
+  },
+
+
+  "PreAlzheimers_E2E2": {
+	"type": "Delay", 
+	"range": {"low": 75, "high": 90, "unit": "years"}, 
+	"conditional_transition": [
+		{"condition": {
+			"condition_type": "Socioeconomic Status", "category": "High"}, 
+			"transition": "EducationDelay_E2E2"},
+			{"transition": "AlzheimersOnset"}
+	]
+  },
+  "EducationDelay_E2E2": {
+	"type": "Delay", 
+	"range": {"low": 6, "high": 12, "unit": "years"}, 
+	"direct_transition": "AlzheimersOnset"
+  },
+    
+  
+
+   
+    "AlzheimersOnset": {
+     "type": "ConditionOnset",
+     "target_encounter": "DiagnosisEncounter",
+     "assign_to_attribute": "Type of Alzheimer's",
+     "codes": [
+    { "system": "SNOMED-CT", "code": "26929004", "display": "Dementia" }
+  ],
+    "direct_transition": "Misura_HIS_Encounter"
+  },
+  "Misura_HIS_Encounter": {
+   "type": "Encounter",
+   "encounter_class": "ambulatory",
+   "wellness": false,
+   "direct_transition": "HIS_Observation"
+  },
+  "HIS_Observation": {
+   "type": "Observation",
+   "category": "survey",
+   "codes": [
+    { "system": "LOINC", "code": "LP217470-1", "display": "Hachinski Ischemic Score" }
+  ],
+   "range": {
+    "low": 0,
+    "high": 12
+   },
+   "unit": "{score}",
+   "direct_transition": "End_Misura_HIS_Encounter"
+  },
+  
+   "End_Misura_HIS_Encounter": {
+      "type": "EncounterEnd",
+      "direct_transition": "Valuta_HIS"
+    },
+    
+  "Valuta_HIS": {
+   "type": "Simple",
+   "conditional_transition": [
+    {
+      "condition": {
+      	"condition_type": "Observation",
+      	"codes": [
+        {
+          "system": "LOINC",
+           "code": "LP217470-1",
+           "display": "Hachinski Ischemic Score"
+        }
+      ],
+      "operator": "<",
+      "value": 4
+      },
+      "transition": "Vascular_Onset"
+    },
+    {
+      "condition": {
+       "condition_type": "Observation",
+       "codes": [
+        {
+          "system": "LOINC",
+           "code": "LP217470-1",
+           "display": "Hachinski Ischemic Score"
+        }
+      ],
+      "operator": ">",
+      "value": 7
+      },
+      "transition": "Alzheimer_Onset_Final"
+    }
+  ]
+ },
+
+   "Vascular_Onset": {
+    "type": "ConditionOnset",
+    "codes": [
+     { "system": "SNOMED-CT", "code": "429998004", "display": "Vascular dementia (disorder)" }
+   ],
+    "direct_transition": "ModerateDecline"
+ },
+
+    "Alzheimer_Onset_Final": {
+     "type": "ConditionOnset",
+     "codes": [
+     { "system": "SNOMED-CT", "code": "26929004", "display": "Alzheimer's disease (disorder)" }
+  ],
+    "direct_transition": "Eventual_Hospice_Reason"
+  },
+    "PreEarlyOnsetAlzheimers": {
+      "type": "Delay",
+      "range": { "low": 40, "high": 64, "unit": "years" },
+      "direct_transition": "EarlyOnsetAlzheimersOnset"
+    },
+    "EarlyOnsetAlzheimersOnset": {
+      "type": "ConditionOnset",
+      "target_encounter": "DiagnosisEncounter",
+      "assign_to_attribute": "Type of Alzheimer's",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "230265002", "display": "Familial Alzheimer's disease of early onset (disorder)" }
+      ],
+      "direct_transition": "Eventual_Hospice_Reason"
+    },
+
+    "NoImpairment": {
+      "type": "Delay",
+      "range": { "low": 12, "high": 36, "unit": "months" },
+      "remarks": [
+        "1. Normal"
+      ],
+      "direct_transition": "VeryMildDecline"
+    },
+    "VeryMildDecline": {
+      "type": "Delay",
+      "range": { "low": 12, "high": 36, "unit": "months" },
+      "remarks": [
+        "2. Very mild decline, also considered normal aged forgetfulness"
+      ],
+      "direct_transition": "DecreasedCommunication"
+    },
+    "DecreasedCommunication": {
+      "type": "Symptom",
+      "symptom": "Decreased Communication",
+      "range": { "low": 0, "high": 50 },
+      "direct_transition": "DecreasedAttentiveness"
+    },
+    "DecreasedAttentiveness": {
+      "type": "Symptom",
+      "symptom": "Decreased Attentiveness",
+      "range": { "low": 0, "high": 50 },
+      "direct_transition": "DecreasedJudgment"
+    },
+    "DecreasedJudgment": {
+      "type": "Symptom",
+      "symptom": "Decreased in Judgement",
+      "range": { "low": 0, "high": 50 },
+      "direct_transition": "DecreasedVisualPerception"
+    },
+    "DecreasedVisualPerception": {
+      "type": "Symptom",
+      "symptom": "Decreased Visual Perception",
+      "range": { "low": 0, "high": 50 },
+      "direct_transition": "Confusion"
+    },
+    "Confusion": {
+      "type": "Symptom",
+      "symptom": "Confusion",
+      "range": { "low": 0, "high": 50 },
+      "direct_transition": "MildMemoryLoss"
+    },
+    "MildMemoryLoss": {
+      "type": "Symptom",
+      "symptom": "Memory Loss",
+      "range": { "low": 0, "high": 50 },
+      "direct_transition": "MildDecline"
+    },
+    "MildDecline": {
+      "type": "Delay",
+      "range": { "low": 6, "high": 12, "unit": "months" },
+      "remarks": [
+        "3. Mild decline, aka mild cognitive impairment (MCI) progresses to the next stage in generally 2-4 years",
+        "Persons at this stage display subtle deficits which are noted by others close to the subject",
+        "https://www.alzinfo.org/understand-alzheimers/clinical-stages-of-alzheimers/"
+      ],
+      "conditional_transition": [
+        {
+          "condition": { "condition_type": "Symptom", "symptom": "Memory Loss", "operator": ">", "value": 40 },
+          "transition": "DiagnosisEncounter",
+          "remarks": [
+            "if the symptom is sufficiently noticeable enough people can be diagnosed in this stage, if not they will be diagnosed in the next stage"
+          ]
+        },
+        {
+          "condition": { "condition_type": "Symptom", "symptom": "Memory Loss", "operator": ">", "value": 30 },
+          "transition": "ModerateDecline"
+        },
+        { "transition": "MildMemoryLoss" }
+      ]
+    },
+
+    "DiagnosisEncounter": {
+      "type": "Encounter",
+      "wellness": true,
+      "remarks": [
+        "This is the enounter where alzheimer's is diagnosed. ",
+        "Typical life expectancy after an Alzheimer’s diagnosis is 4-to-8 years. (Alzheimer’s Association)"
+      ],
+      "direct_transition": "Lab_analysis",
+      "reason": "Type of Alzheimer's"
+    },
+    "Lab_analysis": {
+      "type": "CallSubmodule",
+      "submodule": "heart/chf_lab_work",
+      "direct_transition": "Diagnosis_CDR_SB"
+    },
+    "Diagnosis_CDR_SB": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 0.5, "high": 4 },
+      "unit": "{score}",
+      "remarks": [
+        "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "72088-8", "display": "CDR-SB total score" }
+      ],
+      "direct_transition": "Diagnosis_NPI"
+    },
+    "Diagnosis_NPI": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 11, "high": 34 },
+      "unit": "{score}",
+      "remarks": [
+        "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "72509-6", "display": "NPI total score" }
+      ],
+      "direct_transition": "Diagnosis_ADAS_Cog"
+    },
+     "Diagnosis_ADAS_Cog": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 0, "high": 17 },
+      "unit": "{score}",
+      "remarks": [
+        
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "72234-8", "display": "ADAS_Cog total score" }
+      ],
+      "direct_transition": "Diagnosis_ADAS_Cog_11"
+    },
+     "Diagnosis_ADAS_Cog_11": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 0, "high": 17 },
+      "unit": "{score}",
+      "remarks": [
+        
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "54804-0", "display": "ADAS_Cog11 total score" }
+      ],
+      "direct_transition": "Diagnosis_ADCS_ADL"
+    },
+     "Diagnosis_ADCS_ADL": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 70, "high": 75 },
+      "unit": "{score}",
+      "remarks": [
+        
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "57048-1", "display": "ADCS_ADL total score" }
+      ],
+      "direct_transition": "Diagnosis_CDR"
+    },
+     "Diagnosis_CDR": {
+      "type": "Observation",
+      "category": "survey",
+      "exact": {"quantity": 0.5},
+      "unit": "{score}",
+      "remarks": [
+        
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "72088-8", "display": "CDR total score" }
+      ],
+      "direct_transition": "Diagnosis_GDS"
+    },
+     "Diagnosis_GDS": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 0, "high": 11 },
+      "unit": "{score}",
+      "remarks": [
+        
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "48542-5", "display": "GDS total score" }
+      ],
+      "direct_transition": "Diagnosis_CSF_AB42"
+    },
+    
+      "Diagnosis_CSF_AB42": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 600, "high": 1000 },
+       "unit": "pg/ml",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "33203-1", "display": "CSF_AB42 quantification" }
+       ],
+       "direct_transition": "Diagnosis_CSF_Ttau"
+    },
+    
+     "Diagnosis_CSF_Ttau": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 200, "high": 400 },
+       "unit": "pg/ml",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "CSF_Ttau quantification" }
+       ],
+       "direct_transition": "Diagnosis_MMSE_Score_Ethnicity"
+    },
+       
+    "Diagnosis_MMSE_Score_Ethnicity": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+           "condition_type": "Race",
+            "race": "Asian"
+           },
+         "transition": "Diagnosis_MMSE_Score_Asian"
+        },
+        {
+         "condition": {
+           "condition_type": "Race",
+           "race": "White"
+          },
+        "transition": "Diagnosis_MMSE_Score_White"
+       },
+       {
+        "condition": {
+          "condition_type": "Race",
+          "race": "Black"
+         },
+        "transition": "Diagnosis_MMSE_Score_Black"
+       }
+     ]
+    },
+
+   "Diagnosis_MMSE_Score_White": {
+     "type": "Observation",
+     "category": "survey",
+     "range": { "low": 18, "high": 25 },
+     "unit": "{score}",
+     "codes": [
+      { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+      ],
+     "direct_transition": "Dementia_CarePlan"
+   },
+
+  "Diagnosis_MMSE_Score_Asian": {
+    "type": "Observation",
+    "category": "survey",
+    "range": { "low": 16.75, "high": 23.75 },
+    "unit": "{score}",
+    "codes": [
+     { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+    ],
+    "direct_transition": "Dementia_CarePlan"
+  },
+  
+   "Diagnosis_MMSE_Score_Black": {
+    "type": "Observation",
+    "category": "survey",
+    "range": { "low": 16.18, "high": 23.18 },
+    "unit": "{score}",
+    "codes": [
+     { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+    ],
+    "direct_transition": "Dementia_CarePlan"
+  },
+
+    "Dementia_CarePlan": {
+      "type": "CarePlanStart",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "386257007", "display": "Dementia management (regime/therapy)" }
+      ],
+      "activities": [
+        { "system": "SNOMED-CT", "code": "311401005", "display": "Patient education (procedure)" },
+        { "system": "SNOMED-CT", "code": "710125008", "display": "Promotion of use of memory skills (procedure)" },
+        { "system": "SNOMED-CT", "code": "315043002", "display": "Long term social support (regime/therapy)" }
+      ],
+      "direct_transition": "Delay_1"
+    },
+    "Delay_1": {
+      "type": "Delay",
+      "exact": { "quantity": 3, "unit": "months" },
+      "remarks": [
+      ],
+      "direct_transition": "Lab_analysis_t1"
+    },
+    "Lab_analysis_t1": {
+      "type": "CallSubmodule",
+      "submodule": "heart/chf_lab_work",
+      "direct_transition": "Diagnosis_CDR_SB_t1"
+    },
+    "Diagnosis_CDR_SB_t1": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 0.5, "high": 4 },
+      "unit": "{score}",
+      "remarks": [
+        "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "72088-8", "display": "CDR-SB total score" }
+      ],
+      "direct_transition": "Diagnosis_NPI_t1"
+    },
+    "Diagnosis_NPI_t1": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 11, "high": 34 },
+      "unit": "{score}",
+      "remarks": [
+        "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "72509-6", "display": "NPI total score" }
+      ],
+      "direct_transition": "Diagnosis_ADAS_Cog_t1"
+    },
+     "Diagnosis_ADAS_Cog_t1": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 0, "high": 17 },
+      "unit": "{score}",
+      "remarks": [
+        
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "72234-8", "display": "ADAS_Cog total score" }
+      ],
+      "direct_transition": "Diagnosis_ADAS_Cog_11_t1"
+    },
+     "Diagnosis_ADAS_Cog_11_t1": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 0, "high": 17 },
+      "unit": "{score}",
+      "remarks": [
+        
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "54804-0", "display": "ADAS_Cog11 total score" }
+      ],
+      "direct_transition": "Diagnosis_ADCS_ADL_t1"
+    },
+     "Diagnosis_ADCS_ADL_t1": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 70, "high": 75 },
+      "unit": "{score}",
+      "remarks": [
+        
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "57048-1", "display": "ADCS_ADL total score" }
+      ],
+      "direct_transition": "Diagnosis_CDR_t1"
+    },
+     "Diagnosis_CDR_t1": {
+      "type": "Observation",
+      "category": "survey",
+      "exact": {"quantity": 0.5},
+      "unit": "{score}",
+      "remarks": [
+        
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "72088-8", "display": "CDR total score" }
+      ],
+      "direct_transition": "Diagnosis_GDS_t1"
+    },
+     "Diagnosis_GDS_t1": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 0, "high": 11 },
+      "unit": "{score}",
+      "remarks": [
+        
+      ],
+      "codes": [
+        { "system": "LOINC", "code": "48542-5", "display": "GDS total score" }
+      ],
+      "direct_transition": "Diagnosis_CSF_AB42_t1"
+    },
+    
+      "Diagnosis_CSF_AB42_t1": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 600, "high": 1000 },
+       "unit": "pg/ml",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "33203-1", "display": "CSF_AB42 quantification" }
+       ],
+       "direct_transition": "Diagnosis_CSF_Ttau_t1"
+    },
+    
+     "Diagnosis_CSF_Ttau_t1": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 200, "high": 400 },
+       "unit": "pg/ml",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "CSF_Ttau quantification" }
+       ],
+       "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t1"
+    },
+       
+    "Diagnosis_MMSE_Score_Ethnicity_t1": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+           "condition_type": "Race",
+            "race": "Asian"
+           },
+         "transition": "Diagnosis_MMSE_Score_Asian_t1"
+        },
+        {
+         "condition": {
+           "condition_type": "Race",
+           "race": "White"
+          },
+        "transition": "Diagnosis_MMSE_Score_White_t1"
+       },
+       {
+        "condition": {
+          "condition_type": "Race",
+          "race": "Black"
+         },
+        "transition": "Diagnosis_MMSE_Score_Black_t1"
+       }
+     ]
+    },
+
+   "Diagnosis_MMSE_Score_White_t1": {
+     "type": "Observation",
+     "category": "survey",
+     "range": { "low": 18, "high": 25 },
+     "unit": "{score}",
+     "codes": [
+      { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+      ],
+     "direct_transition": "FirstPrescription"
+   },
+
+  "Diagnosis_MMSE_Score_Asian_t1": {
+    "type": "Observation",
+    "category": "survey",
+    "range": { "low": 16.75, "high": 23.75 },
+    "unit": "{score}",
+    "codes": [
+     { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+    ],
+    "direct_transition": "FirstPrescription"
+  },
+  
+   "Diagnosis_MMSE_Score_Black_t1": {
+    "type": "Observation",
+    "category": "survey",
+    "range": { "low": 16.18, "high": 23.18 },
+    "unit": "{score}",
+    "codes": [
+     { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+    ],
+    "direct_transition": "FirstPrescription"
+  },
+
+   "FirstPrescription": {
+      "type": "Simple",
+      "conditional_transition": [
+      
+        {
+          "transition": "FirstPrescription4",
+          "condition": {
+            "condition_type": "At Least",
+            "minimum": 2,
+            "conditions": [
+              {
+                "condition_type": "Attribute",
+                "attribute": "apoe_genotype",
+                "operator": "==",
+                "value": "e2/e2"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "apoe_genotype",
+                "operator": "==",
+                "value": "e2/e3"
+              },
+              {
+                "condition_type": "Attribute",
+                "attribute": "apoe_genotype",
+                "operator": "==",
+                "value": "e3/e3"
+              },
+              {
+                "condition_type": "Date",
+                "operator": ">",
+                "year": 2023
+              }
+            ]
+          }
+        },
+        {
+          "condition": {
+            "condition_type": "Date",
+            "operator": ">",
+            "year": 2001
+          },
+          "transition": "FirstPrescription1",
+          "remarks": [
+            "galantamine(razadyne) fda approved in 2001"
+          ]
+        },
+        {
+          "condition": {
+            "condition_type": "Date",
+            "operator": ">",
+            "year": 1996
+          },
+          "transition": "FirstPrescription2",
+          "remarks": [
+            "donepezil(aricept) fda approved in 1996"
+          ]
+        },
+        {
+          "condition": {
+            "condition_type": "Date",
+            "operator": ">",
+            "year": 1993
+          },
+          "transition": "FirstPrescription3",
+          "remarks": [
+            "tarine first available in 1993"
+          ]
+        },
+        {
+          "condition": {
+            "condition_type": "Date",
+            "operator": ">",
+            "year": 1997
+          },
+          "transition": "FirstPrescription5",
+          "remarks": [
+            "rivastigmina availbale from 1997"
+          ]
+        },
+        {
+          "transition": "End_Diagnosis_Encounter",
+          "remarks": [
+            "before 1993 there were no specific drugs approved for Alzheimer’s by the fda"
+          ]
+        }
+      ]
+    },
+    "FirstPrescription1": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "310436",
+          "display": "Galantamine 4 MG Oral Tablet"
+        }
+      ],
+      "direct_transition": "Galantamine_TEAE_Check"
+    },
+    
+    "Galantamine_TEAE_Check": {
+      "type": "Simple",
+      "distributed_transition": [
+        { "distribution": 0.186, "transition": "Galantamine_TEAE" },  
+        { "distribution": 0.814, "transition": "GalantamineDelay" }
+      ]
+    },
+ 
+    "FirstPrescription2": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "997223",
+          "display": "Donepezil hydrochloride 10 MG Oral Tablet"
+        }
+      ],
+      "direct_transition": "Donepezil_TEAE_Check"
+    },
+    
+    "Donepezil_TEAE_Check": {
+      "type": "Simple",
+      "distributed_transition": [
+        { "distribution": 0.20, "transition": "Donepezil_TEAE" },  
+        { "distribution": 0.80, "transition": "DonepezilDelay" }
+      ]
+    },
+    "FirstPrescription3": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "313185",
+          "display": "Tacrine 10 MG Oral Capsule"
+        }
+      ],
+      "direct_transition": "Tacrine_TEAE_Check"
+    },
+    
+    "Tacrine_TEAE_Check": {
+      "type": "Simple",
+      "distributed_transition": [
+        { "distribution": 0.50, "transition": "Tacrina_TEAE" },  
+        { "distribution": 0.50, "transition": "TacrineDelay" }
+      ]
+    },
+     "FirstPrescription4": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+     
+      "direct_transition": "Lecanemab_TEAE_Check"
+    },
+    
+    "Lecanemab_TEAE_Check": {
+      "type": "Simple",
+      "distributed_transition": [
+        { "distribution": 0.105, "transition": "Lecanemab_TEAE" },  
+        { "distribution": 0.895, "transition": "LecanemabDelay" }
+      ]
+    },
+     "FirstPrescription5": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+      
+      "direct_transition": "Rivastigmina_TEAE_Check"
+    },
+    
+    "Rivastigmina_TEAE_Check": {
+      "type": "Simple",
+      "distributed_transition": [
+        { "distribution": 0.193, "transition": "Rivastigmina_TEAE" },  
+        { "distribution": 0.807, "transition": "RivastigminaDelay" }
+      ]
+    },
+    
+     "LecanemabDelay": {
+	"type": "Delay", 
+	"range": {"low": 2, "high": 3, "unit": "years"}, 
+	"direct_transition": "End_Diagnosis_Encounter"
+     },
+     "RivastigminaDelay": {
+	"type": "Delay", 
+	"range": {"low": 3, "high": 6, "unit": "months"}, 
+	"direct_transition": "End_Diagnosis_Encounter"
+     },
+     "TacrineDelay": {
+	"type": "Delay", 
+	"range": {"low": 6, "high": 12, "unit": "months"}, 
+	"direct_transition": "End_Diagnosis_Encounter"
+     },
+     "GalantamineDelay": {
+	"type": "Delay", 
+	"range": {"low": 6, "high": 12, "unit": "months"}, 
+	"direct_transition": "End_Diagnosis_Encounter"
+     },
+     "DonepezilDelay": {
+	"type": "Delay", 
+	"range": {"low": 6, "high": 24, "unit": "months"}, 
+	"direct_transition": "End_Diagnosis_Encounter"
+     },  
+     "Galantamine_TEAE": {
+      "type": "ConditionOnset",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "422587007", "display": "Nausea" }
+       ],
+       "direct_transition": "MedicationStop_Galantamine"
+     },
+     "Donepezil_TEAE": {
+      "type": "ConditionOnset",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "422587007", "display": "Nausea" }
+       ],
+       "direct_transition": "MedicationStop_Donepezil"
+     },
+     "Lecanemab_TEAE": {
+      "type": "ConditionOnset",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "703276005", "display": "ARIA-E" }
+       ],
+       "direct_transition": "MedicationStop_Lecanemab"
+     },
+     "Rivastigmina_TEAE": {
+      "type": "ConditionOnset",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "422587007", "display": "Nausea" }
+       ],
+       "direct_transition": "MedicationStop_Rivastigmina"
+     },
+     "Tacrina_TEAE": {
+      "type": "ConditionOnset",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "400064005", "display": "Hepatotoxicity" }
+       ],
+       "direct_transition": "MedicationStop_Tacrine"
+     },
+     
+     "MedicationStop_Donepezil": {
+      "type": "MedicationEnd",
+      "codes": [ 
+         {
+          "system": "RxNorm",
+          "code": "997223",
+          "display": "Donepezil hydrochloride 10 MG Oral Tablet"
+         }
+        ],
+      "direct_transition": "End_Diagnosis_Encounter"
+     },
+     "MedicationStop_Galantamine": {
+      "type": "MedicationEnd",
+      "codes": [ 
+         {
+          "system": "RxNorm",
+          "code": "310436",
+          "display": "Galantamine 4 MG Oral Tablet"
+         }
+        ],
+      "direct_transition": "End_Diagnosis_Encounter"
+     },
+     "MedicationStop_Rivastigmina": {
+      "type": "MedicationEnd",
+      
+      "direct_transition": "End_Diagnosis_Encounter"
+     },
+     "MedicationStop_Lecanemab": {
+      "type": "MedicationEnd",
+     
+      "direct_transition": "End_Diagnosis_Encounter"
+     },
+     "MedicationStop_Tacrine": {
+      "type": "MedicationEnd",
+      "codes": [ 
+         {
+          "system": "RxNorm",
+          "code": "313185",
+          "display": "Tacrine 10 MG Oral Capsule"
+         }
+        ],
+      "direct_transition": "End_Diagnosis_Encounter"
+     },
+
+     "ModerateDecline": {
+      "type": "Delay",
+      "range": {
+        "low": 5,
+        "high": 7,
+        "unit": "months"
+      },
+      "remarks": [
+        "4. Moderate decline, or mild alzheimer's has a mean duration of 2 years.",
+        "The diagnosis of alzheimer's can be made with considerable accuracy in this stage",
+        "https://www.alzinfo.org/understand-alzheimers/clinical-stages-of-alzheimers/"
+      ],
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Not",
+            "condition": {
+              "condition_type": "PriorState",
+              "name": "DiagnosisEncounter"
+            }
+          },
+          "transition": "DiagnosisEncounter"
+        },
+        {
+          "condition": {
+            "condition_type": "Symptom",
+            "symptom": "Memory Loss",
+            "operator": ">",
+            "value": 70
+          },
+          "transition": "ModeratelySevere_Encounter"
+        },
+        {
+          "transition": "ModerateMemoryLoss"
+        }
+      ]
+    },
+    "ModerateMemoryLoss": {
+      "type": "Symptom",
+      "symptom": "Memory Loss",
+      "range": {
+        "low": 50,
+        "high": 100
+      },
+      "remarks": [
+        "These numbers do not map to any real data, they are just picked mathematically to get the %s right"
+      ],
+      "direct_transition": "ModerateDecline"
+    },
+
+    "ModeratelySevere_Encounter": {
+      "type": "Encounter",
+      "encounter_class": "ambulatory",
+      "reason": "Type of Alzheimer's",
+      "telemedicine_possibility": "possible",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "281036007", "display": "Follow-up consultation (procedure)" }
+      ],
+      "direct_transition": "Lab_analysis2"
+    },
+    "Lab_analysis2": {
+      "type": "CallSubmodule",
+      "submodule": "heart/chf_lab_work",
+      "direct_transition": "ModeratelySevere_CDR_SB"
+    },
+    "ModeratelySevere_CDR_SB": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 4.5, "high": 9 },
+      "unit": "{score}",
+      "codes": [
+        { "system": "LOINC", "code": "72088-8", "display": "CDR-SB total score" }
+      ],
+      "direct_transition": "ModeratelySevere_NPI"
+    },
+    "ModeratelySevere_NPI": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 35, "high": 55 },
+      "unit": "{score}",
+      "codes": [
+        { "system": "LOINC", "code": "72509-6", "display": "NPI total score" }
+      ],
+      "direct_transition": "ModeratelySevere_ADAS_Cog"
+    },
+    
+    "ModeratelySevere_ADAS_Cog": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 18, "high": 20 },
+      "unit": "{score}",
+      "remarks": [
+
+	],
+      "codes": [
+	{ "system": "LOINC", "code": "72234-8", "display": "ADAS_Cog total score" }
+	],
+      "direct_transition": "ModeratelySevere_ADAS_Cog_11"
+	},
+
+    "ModeratelySevere_ADAS_Cog_11": {
+	"type": "Observation",
+	"category": "survey",
+	"range": { "low": 18, "high": 20 },
+	"unit": "{score}",
+	"remarks": [
+
+	],
+	"codes": [
+	{ "system": "LOINC", "code": "54804-0", "display": "ADAS_Cog11 total score" }
+	],
+	"direct_transition": "ModeratelySevere_ADCS_ADL"
+	},
+    "ModeratelySevere_ADCS_ADL": {
+	"type": "Observation",
+	"category": "survey",
+	"range": { "low": 50, "high": 65 },
+	"unit": "{score}",
+	"remarks": [
+
+	],
+	"codes": [
+	{ "system": "LOINC", "code": "57048-1", "display": "ADCS_ADL total score" }
+	],
+	"direct_transition": "ModeratelySevere_CDR"
+	},
+    "ModeratelySevere_CDR": {
+	"type": "Observation",
+	"category": "survey",
+	"exact": {"quantity": 1},
+	"unit": "{score}",
+	"remarks": [
+
+	],
+	"codes": [
+	{ "system": "LOINC", "code": "72088-8", "display": "CDR total score" }
+	],
+	"direct_transition": "ModeratelySevere_GDS"
+	},
+    "ModeratelySevere_GDS": {
+	"type": "Observation",
+	"category": "survey",
+	"range": { "low": 11, "high": 30 },
+	"unit": "{score}",
+	"remarks": [
+
+	],
+	"codes": [
+	{ "system": "LOINC", "code": "48542-5", "display": "GDS total score" }
+	],
+	"direct_transition": "ModeratelySevere_CSF_AB42"
+	},
+	 
+    "ModeratelySevere_CSF_AB42": {
+      "type": "Observation",
+      "category": "imaging",
+      "range": { "low": 500, "high": 800 },
+      "unit": "pg/ml",
+      "remarks": [
+
+       ],
+      "codes": [
+        { "system": "LOINC", "code": "33203-1", "display": "CSF_AB42 quantification" }
+       ],
+      "direct_transition": "ModeratelySevere_CSF_Ttau"
+    },
+    
+    "ModeratelySevere_CSF_Ttau": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 400, "high": 600 },
+       "unit": "pg/ml",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "CSF_Ttau quantification" }
+       ],
+       "direct_transition": "ModeratelySevere_FDG_PET_SUVR"
+    },
+    
+     "ModeratelySevere_FDG_PET_SUVR": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.395, "high": 0.523 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "87907-2", "display": "FDG_PET_SUVR quantification" }
+       ],
+       "direct_transition": "Diagnosis_MMSE_Score_Ethnicity2"
+    },
+      "Diagnosis_MMSE_Score_Ethnicity2": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+           "condition_type": "Race",
+            "race": "Asian"
+           },
+         "transition": "Diagnosis_MMSE_Score_Asian2"
+        },
+        {
+         "condition": {
+           "condition_type": "Race",
+           "race": "White"
+          },
+        "transition": "Diagnosis_MMSE_Score_White2"
+       },
+       {
+        "condition": {
+          "condition_type": "Race",
+          "race": "Black"
+         },
+        "transition": "Diagnosis_MMSE_Score_Black2"
+       }
+     ]
+    },
+
+   "Diagnosis_MMSE_Score_White2": {
+     "type": "Observation",
+     "category": "survey",
+     "range": { "low": 12, "high": 18 },
+     "unit": "{score}",
+     "codes": [
+      { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+      ],
+     "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Attribute",
+            "attribute": "Alzheimer's Medication",
+            "operator": "is not nil"
+          },
+          "transition": "EndFirstPrescription"
+        },
+        {
+          "transition": "SecondPrescription"
+        }
+      ]
+   },
+
+  "Diagnosis_MMSE_Score_Asian2": {
+    "type": "Observation",
+    "category": "survey",
+    "range": { "low": 10.75, "high": 16.75 },
+    "unit": "{score}",
+    "codes": [
+     { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+    ],
+    "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Attribute",
+            "attribute": "Alzheimer's Medication",
+            "operator": "is not nil"
+          },
+          "transition": "EndFirstPrescription"
+        },
+        {
+          "transition": "SecondPrescription"
+        }
+      ]
+  },
+  
+   "Diagnosis_MMSE_Score_Black2": {
+    "type": "Observation",
+    "category": "survey",
+    "range": { "low": 10.18, "high": 16.18 },
+    "unit": "{score}",
+    "remarks": [
+        "The maximum MMSE score is 30 points. A score of 20 to 24 suggests mild dementia, ",
+        "13 to 20 suggests moderate dementia, and less than 12 indicates severe dementia",
+        "http://www.alz.org/alzheimers_disease_steps_to_diagnosis.asp"
+      ],
+    "codes": [
+     { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+    ],
+    "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Attribute",
+            "attribute": "Alzheimer's Medication",
+            "operator": "is not nil"
+          },
+          "transition": "EndFirstPrescription"
+        },
+        {
+          "transition": "SecondPrescription"
+        }
+      ]
+   },
+  
+    "EndFirstPrescription": {
+      "type": "MedicationEnd",
+      "referenced_by_attribute": "Alzheimer's Medication",
+      "direct_transition": "SecondPrescription"
+    },
+    "SecondPrescription": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+            "condition_type": "Date",
+            "operator": ">",
+            "year": 2014
+          },
+          "transition": "SecondPrescription1",
+          "remarks": [
+            "memantine+donepezil(namzaric) fda approved in 2014"
+          ]
+        },
+        {
+          "condition": {
+            "condition_type": "Date",
+            "operator": ">",
+            "year": 2003
+          },
+          "transition": "SecondPrescription2",
+          "remarks": [
+            "memantine(namenda) fda approved in 2003"
+          ]
+        },
+        {
+          "condition": {
+            "condition_type": "Date",
+            "operator": ">",
+            "year": 1997
+          },
+          "transition": "SecondPrescription4",
+          "remarks": [
+            "rivastigmina availbale from 1997"
+          ]
+        },
+        {
+          "condition": {
+            "condition_type": "Date",
+            "operator": ">",
+            "year": 1996
+          },
+          "transition": "SecondPrescription3",
+          "remarks": [
+            "donepezil(aricept) fda approved in 1996"
+          ]
+        },
+        {
+          "transition": "End_ModeratelySevere_Encounter"
+        }
+      ]
+    },
+    "SecondPrescription1": {
+      "type": "MedicationOrder",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "1599803",
+          "display": "24 HR Donepezil hydrochloride 10 MG / Memantine hydrochloride 28 MG Extended Release Oral Capsule"
+        }
+      ],
+      "direct_transition": "DonepezilMemantine_TEAE_Check"
+    },
+    "DonepezilMemantine_TEAE_Check": {
+      "type": "Simple",
+      "distributed_transition": [
+        { "distribution": 0.286, "transition": "DonepezilMemantine_TEAE" },  
+        { "distribution": 0.714, "transition": "DonepezilMemantineDelay" }
+      ]
+    },
+    "SecondPrescription2": {
+      "type": "MedicationOrder",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "996740",
+          "display": "Memantine hydrochloride 2 MG/ML Oral Solution"
+        }
+      ],
+      "direct_transition": "Memantine_TEAE_Check"
+    },
+    "Memantine_TEAE_Check": {
+      "type": "Simple",
+      "distributed_transition": [
+        { "distribution": 0.086, "transition": "Memantine_TEAE" },  
+        { "distribution": 0.914, "transition": "MemantineDelay" }
+      ]
+    },
+    "SecondPrescription3": {
+      "type": "MedicationOrder",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "1100184",
+          "display": "Donepezil hydrochloride 23 MG Oral Tablet"
+        }
+      ],
+      "direct_transition": "Donepezil_TEAE_Check2"
+    },
+    "Donepezil_TEAE_Check2": {
+      "type": "Simple",
+      "distributed_transition": [
+        { "distribution": 0.20, "transition": "Donepezil_TEAE2" },  
+        { "distribution": 0.80, "transition": "DonepezilDelay2" }
+      ]
+    },
+    
+     "SecondPrescription4": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+      "direct_transition": "Rivastigmina_TEAE_Check2"
+    },
+    "Rivastigmina_TEAE_Check2": {
+      "type": "Simple",
+      "distributed_transition": [
+        { "distribution": 0.193, "transition": "Rivastigmina_TEAE2" },  
+        { "distribution": 0.807, "transition": "RivastigminaDelay2" }
+      ]
+    },
+    
+    "DonepezilMemantineDelay": {
+	"type": "Delay", 
+	"range": {"low": 6, "high": 24, "unit": "months"}, 
+	"direct_transition": "End_ModeratelySevere_Encounter"
+     },
+     "RivastigminaDelay2": {
+	"type": "Delay", 
+	"range": {"low": 3, "high": 6, "unit": "months"}, 
+	"direct_transition": "End_ModeratelySevere_Encounter"
+     },
+     "MemantineDelay": {
+	"type": "Delay", 
+	"range": {"low": 6, "high": 12, "unit": "months"}, 
+	"direct_transition": "End_ModeratelySevere_Encounter"
+     },
+     "DonepezilDelay2": {
+	"type": "Delay", 
+	"range": {"low": 6, "high": 24, "unit": "months"}, 
+	"direct_transition": "End_ModeratelySevere_Encounter"
+     },
+     
+     "Memantine_TEAE": {
+      "type": "ConditionOnset",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "404640003", "display": "Dizziness" }
+       ],
+       "direct_transition": "MedicationStop_Memantine"
+     },
+     "Donepezil_TEAE2": {
+      "type": "ConditionOnset",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "422587007", "display": "Nausea" }
+       ],
+       "direct_transition": "MedicationStop_Donepezil2"
+     },
+     "DonepezilMemantine_TEAE": {
+      "type": "ConditionOnset",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "703276005", "display": "Nausea-Dizziness" }
+       ],
+       "direct_transition": "MedicationStop_DonepezilMemantine"
+     },
+     "Rivastigmina_TEAE2": {
+      "type": "ConditionOnset",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "422587007", "display": "Nausea" }
+       ],
+       "direct_transition": "MedicationStop_Rivastigmina2"
+     },
+         
+     "MedicationStop_Donepezil2": {
+      "type": "MedicationEnd",
+      "codes": [ 
+         {
+          "system": "RxNorm",
+          "code": "1100184",
+          "display": "Donepezil hydrochloride 23 MG Oral Tablet"
+         }
+        ],
+      "direct_transition": "End_ModeratelySevere_Encounter"
+     },
+     "MedicationStop_DonepezilMemantine": {
+      "type": "MedicationEnd",
+      "codes": [ 
+         {
+          "system": "RxNorm",
+          "code": "1599803",
+          "display": "24 HR Donepezil hydrochloride 10 MG / Memantine hydrochloride 28 MG Extended Release Oral Capsule"
+         }
+        ],
+      "direct_transition": "End_ModeratelySevere_Encounter"
+     },
+     "MedicationStop_Rivastigmina2": {
+      "type": "MedicationEnd",
+      "direct_transition": "End_ModeratelySevere_Encounter"
+     },
+     "MedicationStop_Memantine": {
+      "type": "MedicationEnd",
+      "codes": [ 
+         {
+          "system": "RxNorm",
+          "code": "996740",
+          "display": "Memantine hydrochloride 2 MG/ML Oral Solution"
+         }
+        ],
+      "direct_transition": "End_ModeratelySevere_Encounter"
+     },
+        
+    "End_ModeratelySevere_Encounter": {
+      "type": "EncounterEnd",
+      "direct_transition": "ModeratelySevereDecline"
+    },
+    "ModeratelySevereDecline": {
+      "type": "Delay",
+      "range": {
+        "low": 12,
+        "high": 24,
+        "unit": "months"
+      },
+      "remarks": [
+        "5. Moderately severe decline, aka mid-stage or moderate alzheimer's has a mean duration about 1.5 yrs",
+        "https://www.alzinfo.org/understand-alzheimers/clinical-stages-of-alzheimers/"
+      ],
+      "direct_transition": "Severe_Encounter"
+    },
+
+    "Severe_Encounter": {
+      "type": "Encounter",
+      "encounter_class": "ambulatory",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "281036007", "display": "Follow-up consultation (procedure)" }
+      ],
+      "direct_transition": "Lab_analysis3"
+    },
+    "Lab_analysis3": {
+      "type": "CallSubmodule",
+      "submodule": "heart/chf_lab_work",
+      "direct_transition": "Severe_CDR_SB"
+    },
+    "Severe_CDR_SB": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 9.5, "high": 15.5 },
+      "unit": "{score}",
+      "codes": [
+        { "system": "LOINC", "code": "72088-8", "display": "CDR-SB total score" }
+      ],
+      "direct_transition": "Severe_NPI"
+    },
+    
+    "Severe_NPI": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 56, "high": 75 },
+      "unit": "{score}",
+      "codes": [
+        { "system": "LOINC", "code": "72509-6", "display": "NPI total score" }
+      ],
+      "direct_transition": "Severe_ADAS_Cog"
+    },
+    
+     "Severe_ADAS_Cog": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 21, "high": 25 },
+      "unit": "{score}",
+      "remarks": [
+
+	],
+      "codes": [
+	{ "system": "LOINC", "code": "72234-8", "display": "ADAS_Cog total score" }
+	],
+      "direct_transition": "Severe_ADAS_Cog_11"
+	},
+
+    "Severe_ADAS_Cog_11": {
+	"type": "Observation",
+	"category": "survey",
+	"range": { "low": 21, "high": 25 },
+	"unit": "{score}",
+	"remarks": [
+
+	],
+	"codes": [
+	{ "system": "LOINC", "code": "54804-0", "display": "ADAS_Cog11 total score" }
+	],
+	"direct_transition": "Severe_ADCS_ADL"
+	},
+	
+    "Severe_ADCS_ADL": {
+	"type": "Observation",
+	"category": "survey",
+	"range": { "low": 30, "high": 50 },
+	"unit": "{score}",
+	"remarks": [
+
+	],
+	"codes": [
+	{ "system": "LOINC", "code": "57048-1", "display": "ADCS_ADL total score" }
+	],
+	"direct_transition": "Severe_CDR"
+	},
+    "Severe_CDR": {
+	"type": "Observation",
+	"category": "survey",
+	"exact": {"quantity": 2},
+	"unit": "{score}",
+	"remarks": [
+
+	],
+	"codes": [
+	{ "system": "LOINC", "code": "72088-8", "display": "CDR total score" }
+	],
+	"direct_transition": "Severe_CSF_AB42"
+	},
+	
+    "Severe_CSF_AB42": {
+      "type": "Observation",
+      "category": "imaging",
+      "range": { "low": 400, "high": 700 },
+      "unit": "pg/ml",
+      "remarks": [
+
+       ],
+      "codes": [
+        { "system": "LOINC", "code": "33203-1", "display": "CSF_AB42 quantification" }
+       ],
+      "direct_transition": "Severe_CSF_Ttau"
+    },
+    
+    "Severe_CSF_Ttau": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 400, "high": 900 },
+       "unit": "pg/ml",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "CSF_Ttau quantification" }
+       ],
+       "direct_transition": "Diagnosis_MMSE_Score_Ethnicity3"
+    },
+      "Diagnosis_MMSE_Score_Ethnicity3": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+           "condition_type": "Race",
+            "race": "Asian"
+           },
+         "transition": "Diagnosis_MMSE_Score_Asian3"
+        },
+        {
+         "condition": {
+           "condition_type": "Race",
+           "race": "White"
+          },
+        "transition": "Diagnosis_MMSE_Score_White3"
+       },
+       {
+        "condition": {
+          "condition_type": "Race",
+          "race": "Black"
+         },
+        "transition": "Diagnosis_MMSE_Score_Black3"
+       }
+     ]
+    },
+
+   "Diagnosis_MMSE_Score_White3": {
+     "type": "Observation",
+     "category": "survey",
+     "range": { "low": 6, "high": 12 },
+     "unit": "{score}",
+     "codes": [
+      { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+      ],
+      "remarks": [
+        "The maximum MMSE score is 30 points. A score of 20 to 24 suggests mild dementia, ",
+        "13 to 20 suggests moderate dementia, and less than 12 indicates severe dementia",
+        "http://www.alz.org/alzheimers_disease_steps_to_diagnosis.asp"
+      ],
+     "direct_transition": "End_Severe_Encounter"
+   },
+
+  "Diagnosis_MMSE_Score_Asian3": {
+    "type": "Observation",
+    "category": "survey",
+    "range": { "low": 4.75, "high": 10.75 },
+    "unit": "{score}",
+    "codes": [
+     { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+    ],
+    "direct_transition": "End_Severe_Encounter"
+    },
+  
+   "Diagnosis_MMSE_Score_Black3": {
+    "type": "Observation",
+    "category": "survey",
+    "range": { "low": 4.18, "high": 10.18 },
+    "unit": "{score}",
+    "codes": [
+     { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+    ],
+    "direct_transition": "End_Severe_Encounter"
+    },
+   
+    "End_Severe_Encounter": {
+      "type": "EncounterEnd",
+      "direct_transition": "SevereDecline"
+    },
+    "SevereDecline": {
+      "type": "Delay",
+      "range": {
+        "low": 20,
+        "high": 40,
+        "unit": "months"
+      },
+      "remarks": [
+        "6. Severe decline, or moderately severe Alzheimer's contains 5 defined substages, the total duration approximately 2.5 yrs"
+      ],
+      "direct_transition": "VerySevere_Encounter"
+    },
+
+    "VerySevere_Encounter": {
+      "type": "Encounter",
+      "encounter_class": "ambulatory",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        { "system": "SNOMED-CT", "code": "281036007", "display": "Follow-up consultation (procedure)" }
+      ],
+      "direct_transition": "Lab_analysis4"
+    },
+    "Lab_analysis4": {
+      "type": "CallSubmodule",
+      "submodule": "heart/chf_lab_work",
+      "direct_transition": "VerySevere_CDR_SB"
+    },
+    "VerySevere_CDR_SB": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 16, "high": 18 },
+      "unit": "{score}",
+      "codes": [
+        { "system": "LOINC", "code": "72088-8", "display": "CDR-SB total score" }
+      ],
+      "direct_transition": "VerySevere_NPI"
+    },
+    "VerySevere_NPI": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 76, "high": 144 },
+      "unit": "{score}",
+      "codes": [
+        { "system": "LOINC", "code": "72509-6", "display": "NPI total score" }
+      ],
+      "direct_transition": "VerySevere_ADAS_Cog"
+    },
+    "VerySevere_ADAS_Cog": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 25, "high": 70 },
+      "unit": "{score}",
+      "remarks": [
+
+	],
+      "codes": [
+	{ "system": "LOINC", "code": "72234-8", "display": "ADAS_Cog total score" }
+	],
+      "direct_transition": "VerySevere_ADAS_Cog_11"
+	},
+    "VerySevere_ADAS_Cog_11": {
+      "type": "Observation",
+      "category": "survey",
+      "range": { "low": 25, "high": 70 },
+      "unit": "{score}",
+      "remarks": [
+
+	],
+      "codes": [
+	{ "system": "LOINC", "code": "54804-0", "display": "ADAS_Cog11 total score" }
+	],
+      "direct_transition": "VerySevere_ADCS_ADL"
+	},
+    "VerySevere_ADCS_ADL": {
+     "type": "Observation",
+     "category": "survey",
+     "range": { "low": 0, "high": 30 },
+     "unit": "{score}",
+     "remarks": [
+
+      ],
+     "codes": [
+        { "system": "LOINC", "code": "57048-1", "display": "ADCS_ADL total score" }
+       ],
+     "direct_transition": "VerySevere_CDR"
+    },
+    "VerySevere_CDR": {
+	"type": "Observation",
+	"category": "survey",
+	"exact": {"quantity": 3},
+	"unit": "{score}",
+	"remarks": [
+
+	],
+	"codes": [
+	{ "system": "LOINC", "code": "72088-8", "display": "CDR total score" }
+	],
+	"direct_transition": "VerySevere_CSF_AB42"
+    },
+    
+    "VerySevere_CSF_AB42": {
+     "type": "Observation",
+     "category": "imaging",
+     "range": { "low": 200, "high": 400 },
+     "unit": "pg/ml",
+     "remarks": [
+
+      ],
+     "codes": [
+        { "system": "LOINC", "code": "33203-1", "display": "CSF_AB42 quantification" }
+       ],
+     "direct_transition": "VerySevere_CSF_Ttau"
+    },
+    
+    "VerySevere_CSF_Ttau": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 600, "high": 900 },
+       "unit": "pg/ml",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "CSF_Ttau quantification" }
+       ],
+       "direct_transition": "Diagnosis_MMSE_Score_Ethnicity4"
+    },
+      "Diagnosis_MMSE_Score_Ethnicity4": {
+      "type": "Simple",
+      "conditional_transition": [
+        {
+          "condition": {
+           "condition_type": "Race",
+            "race": "Asian"
+           },
+         "transition": "Diagnosis_MMSE_Score_Asian4"
+        },
+        {
+         "condition": {
+           "condition_type": "Race",
+           "race": "White"
+          },
+        "transition": "Diagnosis_MMSE_Score_White4"
+       },
+       {
+        "condition": {
+          "condition_type": "Race",
+          "race": "Black"
+         },
+        "transition": "Diagnosis_MMSE_Score_Black4"
+       }
+     ]
+    },
+
+   "Diagnosis_MMSE_Score_White4": {
+     "type": "Observation",
+     "category": "survey",
+     "range": { "low": 0, "high": 6 },
+     "unit": "{score}",
+     "codes": [
+      { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+      ],
+      "remarks": [
+        "The maximum MMSE score is 30 points. A score of 20 to 24 suggests mild dementia, ",
+        "13 to 20 suggests moderate dementia, and less than 12 indicates severe dementia",
+        "http://www.alz.org/alzheimers_disease_steps_to_diagnosis.asp"
+      ],
+     "direct_transition": "End_VerySevere_Encounter"
+   },
+
+  "Diagnosis_MMSE_Score_Asian4": {
+    "type": "Observation",
+    "category": "survey",
+    "range": { "low": 0, "high": 4.75 },
+    "unit": "{score}",
+    "codes": [
+     { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+    ],
+    "direct_transition": "End_VerySevere_Encounter"
+    },
+  
+   "Diagnosis_MMSE_Score_Black4": {
+    "type": "Observation",
+    "category": "survey",
+    "range": { "low": 0, "high": 4.18 },
+    "unit": "{score}",
+    "codes": [
+     { "system": "LOINC", "code": "72106-8", "display": "Total score [MMSE]" }
+    ],
+    "direct_transition": "End_VerySevere_Encounter"
+    },
+   
+    "End_VerySevere_Encounter": {
+      "type": "EncounterEnd",
+      "direct_transition": "VerySevereDecline"
+    },
+    "VerySevereDecline": {
+      "type": "Delay",
+      "range": {
+        "low": 6,
+        "high": 12,
+        "unit": "months"
+      },
+      "remarks": [
+        "7. Very severe decline, aka late-stage or severe alzheimer's contains 6 functional substages, each with a mean duration ~1 yr",
+        "https://www.alzinfo.org/understand-alzheimers/clinical-stages-of-alzheimers/"
+      ],
+      "distributed_transition": [
+        {
+          "distribution": 0.16,
+          "transition": "Pneumonia"
+        },
+        {
+          "distribution": 0.16,
+          "transition": "Death"
+        },
+        {
+          "distribution": 0.68,
+          "transition": "VerySevereDecline"
+        }
+      ]
+    },
+
+    "Pneumonia": {
+      "type": "ConditionOnset",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "233604007",
+          "display": "Pneumonia (disorder)"
+        }
+      ],
+      "remarks": [
+        "Pneumonia is one of the most common causes of death among Alzheimer’s patients"
+      ],
+      "direct_transition": "PneumoniaEncounter",
+      "assign_to_attribute": "hospice_reason",
+      "target_encounter": "PneumoniaEncounter"
+    },
+    "PneumoniaEncounter": {
+      "type": "Encounter",
+      "encounter_class": "emergency",
+      "reason": "Pneumonia",
+      "codes": [
+        {
+          "system": "SNOMED-CT",
+          "code": "4525004",
+          "display": "Emergency department patient visit (procedure)"
+        }
+      ],
+      "direct_transition": "Emergency Time"
+    },
+    "PneumoniaDeath": {
+      "type": "Death",
+      "range": {
+        "low": 4,
+        "high": 14,
+        "unit": "days"
+      },
+      "condition_onset": "Pneumonia",
+      "direct_transition": "Admit to Hospice"
+    },
+    "Death": {
+      "type": "Death",
+      "referenced_by_attribute": "Type of Alzheimer's",
+      "direct_transition": "Terminal"
+    },
+    "Terminal": {
+      "type": "Terminal"
+    },
+    "End_Diagnosis_Encounter": {
+      "type": "EncounterEnd",
+      "direct_transition": "ModerateDecline"
+    },
+    "Eventual_Hospice_Reason": {
+      "type": "SetAttribute",
+      "attribute": "hospice_reason",
+      "direct_transition": "NoImpairment",
+      "value_attribute": "Type of Alzheimer's"
+    },
+    "Admit to Hospice": {
+      "type": "SetAttribute",
+      "attribute": "hospice",
+      "direct_transition": "Terminal",
+      "value": true
+    },
+    "Emergency Time": {
+      "type": "Delay",
+      "distribution": {
+        "kind": "EXPONENTIAL",
+        "parameters": {
+          "mean": 3
+        }
+      },
+      "unit": "hours",
+      "direct_transition": "End Emergency Visit"
+    },
+    "End Emergency Visit": {
+      "type": "EncounterEnd",
+      "direct_transition": "PneumoniaDeath",
+      "discharge_disposition": {
+        "system": "NUBC",
+        "code": 50,
+        "display": "Discharged/transferred to Hospice - home"
+      }
+    }
+  },
+  "gmf_version": 1
+}
+
