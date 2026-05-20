@@ -545,7 +545,7 @@
     "Diagnosis_CDR_SB": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 0.5, "high": 3 },
+      "range": { "low": 0.5, "high": 10 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -558,7 +558,7 @@
     "Diagnosis_NPI": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 1, "high": 5 },
+      "range": { "low": 1, "high": 30 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -598,7 +598,7 @@
      "Diagnosis_CDR": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 0.5},
+      "range": { "low": 0.5, "high": 1 },
       "unit": "{score}",
       "remarks": [
         
@@ -646,6 +646,20 @@
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR"
+    },
+    
+     "Diagnosis_FDG_PET_SUVR": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.9, "high": 1.4 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity"
     },
@@ -738,7 +752,7 @@
     "Diagnosis_CDR_SB_t1": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 0.5, "high": 3 },
+      "range": { "low": 0.5, "high": 11 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -751,7 +765,7 @@
     "Diagnosis_NPI_t1": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 3, "high": 7 },
+      "range": { "low": 1, "high": 30 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -791,7 +805,7 @@
      "Diagnosis_CDR_t1": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 0.5},
+      "range": { "low": 0.5, "high": 1 },
       "unit": "{score}",
       "remarks": [
         
@@ -804,7 +818,7 @@
      "Diagnosis_GDS_t1": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 5, "high": 8 },
+      "range": { "low": 1, "high": 8 },
       "unit": "{score}",
       "remarks": [
         
@@ -839,6 +853,20 @@
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t1"
+    },
+    
+      "Diagnosis_FDG_PET_SUVR_t1": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.9, "high": 1.4 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t1"
     },
@@ -917,7 +945,7 @@
     "Diagnosis_CDR_SB_t2": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 0.5, "high": 3 },
+      "range": { "low": 0.5, "high": 12 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -930,7 +958,7 @@
     "Diagnosis_NPI_t2": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 4, "high": 7 },
+      "range": { "low": 1, "high": 30 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -970,7 +998,7 @@
      "Diagnosis_CDR_t2": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 0.5},
+      "range": { "low": 0.5, "high": 1 },
       "unit": "{score}",
       "remarks": [
         
@@ -983,7 +1011,7 @@
      "Diagnosis_GDS_t2": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 8, "high": 9 },
+      "range": { "low": 2, "high": 9 },
       "unit": "{score}",
       "remarks": [
         
@@ -1018,6 +1046,20 @@
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t2"
+    },
+    
+      "Diagnosis_FDG_PET_SUVR_t2": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.9, "high": 1.4 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t2"
     },
@@ -1096,7 +1138,7 @@
     "Diagnosis_CDR_SB_t3": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 1, "high": 4 },
+      "range": { "low": 0.5, "high": 13 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -1109,7 +1151,7 @@
     "Diagnosis_NPI_t3": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 5, "high": 9 },
+      "range": { "low": 1, "high": 30 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -1149,7 +1191,7 @@
      "Diagnosis_CDR_t3": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 0.5},
+      "range": { "low": 0.5, "high": 1 },
       "unit": "{score}",
       "remarks": [
         
@@ -1162,7 +1204,7 @@
      "Diagnosis_GDS_t3": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 9, "high": 11 },
+      "range": { "low": 3, "high": 11 },
       "unit": "{score}",
       "remarks": [
         
@@ -1197,6 +1239,20 @@
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t3"
+    },
+    
+      "Diagnosis_FDG_PET_SUVR_t3": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.9, "high": 1.4 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t3"
     },
@@ -1655,7 +1711,7 @@
     "ModeratelySevere_CDR_SB": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 4, "high": 6 },
+      "range": { "low": 4, "high": 12 },
       "unit": "{score}",
       "codes": [
         { "system": "LOINC", "code": "72088-8", "display": "CDR-SB" }
@@ -1665,7 +1721,7 @@
     "ModeratelySevere_NPI": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 7, "high": 15 },
+      "range": { "low": 1, "high": 50 },
       "unit": "{score}",
       "codes": [
         { "system": "LOINC", "code": "72509-6", "display": "NPI" }
@@ -1678,7 +1734,7 @@
     "ModeratelySevere_ADAS_Cog_11": {
 	"type": "Observation",
 	"category": "survey",
-	"range": { "low": 12, "high": 20 },
+	"range": { "low": 12, "high": 40 },
 	"unit": "{score}",
 	"remarks": [
 
@@ -1704,7 +1760,7 @@
     "ModeratelySevere_CDR": {
 	"type": "Observation",
 	"category": "survey",
-	"exact": {"quantity": 1},
+	"range": { "low": 1, "high": 2 },
 	"unit": "{score}",
 	"remarks": [
 
@@ -1717,7 +1773,7 @@
     "ModeratelySevere_GDS": {
 	"type": "Observation",
 	"category": "survey",
-	"range": { "low": 12, "high": 15 },
+	"range": { "low": 8, "high": 15 },
 	"unit": "{score}",
 	"remarks": [
 
@@ -1745,7 +1801,7 @@
     "ModeratelySevere_CSF_Ttau": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 420, "high": 500 },
+       "range": { "low": 300, "high": 500 },
        "unit": "pg/ml",
        "remarks": [
 
@@ -1759,7 +1815,7 @@
      "ModeratelySevere_FDG_PET_SUVR": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 0.395, "high": 0.523 },
+       "range": { "low": 0.9, "high": 1.4 },
        "unit": "{score}",
        "remarks": [
 
@@ -1891,7 +1947,7 @@
     "Diagnosis_CDR_SB_t4": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 6, "high": 8 },
+      "range": { "low": 4, "high": 13 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -1904,7 +1960,7 @@
     "Diagnosis_NPI_t4": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 7, "high": 15 },
+      "range": { "low": 1, "high": 50 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -1918,7 +1974,7 @@
      "Diagnosis_ADAS_Cog_11_t4": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 13, "high": 20 },
+      "range": { "low": 13, "high": 40 },
       "unit": "{score}",
       "remarks": [
         
@@ -1944,7 +2000,7 @@
      "Diagnosis_CDR_t4": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 1},
+      "range": { "low": 1, "high": 2 },
       "unit": "{score}",
       "remarks": [
         
@@ -1957,7 +2013,7 @@
      "Diagnosis_GDS_t4": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 16, "high": 20 },
+      "range": { "low": 8, "high": 20 },
       "unit": "{score}",
       "remarks": [
         
@@ -1985,13 +2041,27 @@
      "Diagnosis_CSF_Ttau_t4": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 520, "high": 580 },
+       "range": { "low": 300, "high": 580 },
        "unit": "pg/ml",
        "remarks": [
 
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t4"
+    },
+    
+      "Diagnosis_FDG_PET_SUVR_t4": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.9, "high": 1.4 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t4"
     },
@@ -2070,7 +2140,7 @@
     "Diagnosis_CDR_SB_t5": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 8, "high": 10 },
+      "range": { "low": 4, "high": 14 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -2083,7 +2153,7 @@
     "Diagnosis_NPI_t5": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 8, "high": 16 },
+      "range": { "low": 1, "high": 50 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -2097,7 +2167,7 @@
      "Diagnosis_ADAS_Cog_11_t5": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 14, "high": 20 },
+      "range": { "low": 14, "high": 40 },
       "unit": "{score}",
       "remarks": [
         
@@ -2123,7 +2193,7 @@
      "Diagnosis_CDR_t5": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 1},
+      "range": { "low": 1, "high": 2 },
       "unit": "{score}",
       "remarks": [
         
@@ -2136,7 +2206,7 @@
      "Diagnosis_GDS_t5": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 21, "high": 25 },
+      "range": { "low": 10, "high": 25 },
       "unit": "{score}",
       "remarks": [
         
@@ -2164,13 +2234,27 @@
      "Diagnosis_CSF_Ttau_t5": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 580, "high": 600 },
+       "range": { "low": 300, "high": 600 },
        "unit": "pg/ml",
        "remarks": [
 
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t5"
+    },
+    
+      "Diagnosis_FDG_PET_SUVR_t5": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.9, "high": 1.4 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t5"
     },
@@ -2249,7 +2333,7 @@
     "Diagnosis_CDR_SB_t6": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 8, "high": 11 },
+      "range": { "low": 4, "high": 15 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -2262,7 +2346,7 @@
     "Diagnosis_NPI_t6": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 8, "high": 16 },
+      "range": { "low": 1, "high": 50 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -2276,7 +2360,7 @@
      "Diagnosis_ADAS_Cog_11_t6": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 15, "high": 22 },
+      "range": { "low": 15, "high": 42 },
       "unit": "{score}",
       "remarks": [
         
@@ -2302,7 +2386,7 @@
      "Diagnosis_CDR_t6": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 1},
+      "range": { "low": 1, "high": 2 },
       "unit": "{score}",
       "remarks": [
         
@@ -2315,7 +2399,7 @@
      "Diagnosis_GDS_t6": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 26, "high": 30 },
+      "range": { "low": 13, "high": 30 },
       "unit": "{score}",
       "remarks": [
         
@@ -2343,13 +2427,27 @@
      "Diagnosis_CSF_Ttau_t6": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 580, "high": 600 },
+       "range": { "low": 300, "high": 600 },
        "unit": "pg/ml",
        "remarks": [
 
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t6"
+    },
+    
+      "Diagnosis_FDG_PET_SUVR_t6": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.9, "high": 1.4 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t6"
     },
@@ -2703,7 +2801,7 @@
     "Severe_CDR_SB": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 11, "high": 13 },
+      "range": { "low": 6, "high": 15 },
       "unit": "{score}",
       "codes": [
         { "system": "LOINC", "code": "72088-8", "display": "CDR-SB" }
@@ -2714,7 +2812,7 @@
     "Severe_NPI": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 13, "high": 20 },
+      "range": { "low": 40, "high": 70 },
       "unit": "{score}",
       "codes": [
         { "system": "LOINC", "code": "72509-6", "display": "NPI" }
@@ -2727,7 +2825,7 @@
     "Severe_ADAS_Cog_11": {
 	"type": "Observation",
 	"category": "survey",
-	"range": { "low": 23, "high": 30 },
+	"range": { "low": 23, "high": 60 },
 	"unit": "{score}",
 	"remarks": [
 
@@ -2754,7 +2852,7 @@
     "Severe_CDR": {
 	"type": "Observation",
 	"category": "survey",
-	"exact": {"quantity": 2},
+	"range": { "low": 1, "high": 2 },
 	"unit": "{score}",
 	"remarks": [
 
@@ -2782,7 +2880,7 @@
     "Severe_CSF_Ttau": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 600, "high": 640 },
+       "range": { "low": 400, "high": 640 },
        "unit": "pg/ml",
        "remarks": [
 
@@ -2790,8 +2888,23 @@
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
        ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_severe"
+    },
+    
+     "Diagnosis_FDG_PET_SUVR_severe": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.5, "high": 1.1 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
+       ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity3"
     },
+    
       "Diagnosis_MMSE_Score_Ethnicity3": {
       "type": "Simple",
       "conditional_transition": [
@@ -2872,7 +2985,7 @@
     "Diagnosis_CDR_SB_t7": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 11, "high": 13 },
+      "range": { "low": 6, "high": 16 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -2885,7 +2998,7 @@
     "Diagnosis_NPI_t7": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 14, "high": 20 },
+      "range": { "low": 40, "high": 71 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -2899,7 +3012,7 @@
      "Diagnosis_ADAS_Cog_11_t7": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 24, "high": 30 },
+      "range": { "low": 23, "high": 61 },
       "unit": "{score}",
       "remarks": [
         
@@ -2925,7 +3038,7 @@
      "Diagnosis_CDR_t7": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 2},
+      "range": { "low": 1, "high": 2 },
       "unit": "{score}",
       "remarks": [
         
@@ -2953,13 +3066,27 @@
      "Diagnosis_CSF_Ttau_t7": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 650, "high": 700 },
+       "range": { "low": 400, "high": 700 },
        "unit": "pg/ml",
        "remarks": [
 
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t7"
+    },
+    
+    "Diagnosis_FDG_PET_SUVR_t7": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.5, "high": 1.1 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t7"
     },
@@ -3038,7 +3165,7 @@
     "Diagnosis_CDR_SB_t8": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 12, "high": 14 },
+      "range": { "low": 6, "high": 17 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -3051,7 +3178,7 @@
     "Diagnosis_NPI_t8": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 15, "high": 20 },
+      "range": { "low": 40, "high": 70 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -3065,7 +3192,7 @@
      "Diagnosis_ADAS_Cog_11_t8": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 25, "high": 30 },
+      "range": { "low": 23, "high": 62 },
       "unit": "{score}",
       "remarks": [
         
@@ -3091,7 +3218,7 @@
      "Diagnosis_CDR_t8": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 2},
+      "range": { "low": 1, "high": 2 },
       "unit": "{score}",
       "remarks": [
         
@@ -3120,13 +3247,27 @@
      "Diagnosis_CSF_Ttau_t8": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 710, "high": 790 },
+       "range": { "low": 500, "high": 790 },
        "unit": "pg/ml",
        "remarks": [
 
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t8"
+    },
+    
+    "Diagnosis_FDG_PET_SUVR_t8": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.5, "high": 1.1 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t8"
     },
@@ -3205,7 +3346,7 @@
     "Diagnosis_CDR_SB_t9": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 12, "high": 14 },
+      "range": { "low": 6, "high": 18 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -3218,7 +3359,7 @@
     "Diagnosis_NPI_t9": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 16, "high": 25 },
+      "range": { "low": 40, "high": 73 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -3232,7 +3373,7 @@
      "Diagnosis_ADAS_Cog_11_t9": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 33, "high": 40 },
+      "range": { "low": 23, "high": 63 },
       "unit": "{score}",
       "remarks": [
         
@@ -3258,7 +3399,7 @@
      "Diagnosis_CDR_t9": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 2},
+      "range": { "low": 1, "high": 2 },
       "unit": "{score}",
       "remarks": [
         
@@ -3287,13 +3428,27 @@
      "Diagnosis_CSF_Ttau_t9": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 790, "high": 800 },
+       "range": { "low": 500, "high": 800 },
        "unit": "pg/ml",
        "remarks": [
 
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t9"
+    },
+    
+     "Diagnosis_FDG_PET_SUVR_t9": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.5, "high": 1.1 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t9"
     },
@@ -3392,7 +3547,7 @@
     "VerySevere_CDR_SB": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 10, "high": 15 },
+      "range": { "low": 10, "high": 18 },
       "unit": "{score}",
       "codes": [
         { "system": "LOINC", "code": "72088-8", "display": "CDR-SB" }
@@ -3402,7 +3557,7 @@
     "VerySevere_NPI": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 25, "high": 45 },
+      "range": { "low": 70, "high": 120 },
       "unit": "{score}",
       "codes": [
         { "system": "LOINC", "code": "72509-6", "display": "NPI" }
@@ -3413,7 +3568,7 @@
     "VerySevere_ADAS_Cog_11": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 35, "high": 42 },
+      "range": { "low": 35, "high": 70 },
       "unit": "{score}",
       "remarks": [
 
@@ -3439,7 +3594,7 @@
     "VerySevere_CDR": {
 	"type": "Observation",
 	"category": "survey",
-	"exact": {"quantity": 3},
+	"range": { "low": 2, "high": 3 },
 	"unit": "{score}",
 	"remarks": [
 
@@ -3467,7 +3622,7 @@
     "VerySevere_CSF_Ttau": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 810, "high": 850 },
+       "range": { "low": 500, "high": 850 },
        "unit": "pg/ml",
        "remarks": [
 
@@ -3475,8 +3630,23 @@
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
        ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_verysevere"
+    },
+    
+     "Diagnosis_FDG_PET_SUVR_verysevere": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.3, "high": 0.9 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
+       ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity4"
     },
+    
       "Diagnosis_MMSE_Score_Ethnicity4": {
       "type": "Simple",
       "conditional_transition": [
@@ -3557,7 +3727,7 @@
     "Diagnosis_CDR_SB_t10": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 10, "high": 16 },
+      "range": { "low": 10, "high": 18 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -3570,7 +3740,7 @@
     "Diagnosis_NPI_t10": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 30, "high": 50 },
+      "range": { "low": 70, "high": 120 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -3584,7 +3754,7 @@
      "Diagnosis_ADAS_Cog_11_t10": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 37, "high": 44 },
+      "range": { "low": 35, "high": 70 },
       "unit": "{score}",
       "remarks": [
         
@@ -3610,7 +3780,7 @@
      "Diagnosis_CDR_t10": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 3},
+      "range": { "low": 2, "high": 3 },
       "unit": "{score}",
       "remarks": [
         
@@ -3639,13 +3809,27 @@
      "Diagnosis_CSF_Ttau_t10": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 850, "high": 870 },
+       "range": { "low": 550, "high": 870 },
        "unit": "pg/ml",
        "remarks": [
 
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t10"
+    },
+    
+      "Diagnosis_FDG_PET_SUVR_t10": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.3, "high": 0.9 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t10"
     },
@@ -3724,7 +3908,7 @@
     "Diagnosis_CDR_SB_t11": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 12, "high": 17 },
+      "range": { "low": 10, "high": 18 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -3737,7 +3921,7 @@
     "Diagnosis_NPI_t11": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 40, "high": 70 },
+      "range": { "low": 70, "high": 130 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -3751,7 +3935,7 @@
      "Diagnosis_ADAS_Cog_11_t11": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 44, "high": 50 },
+      "range": { "low": 35, "high": 70 },
       "unit": "{score}",
       "remarks": [
         
@@ -3777,7 +3961,7 @@
      "Diagnosis_CDR_t11": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 3},
+      "range": { "low": 2, "high": 3 },
       "unit": "{score}",
       "remarks": [
         
@@ -3805,13 +3989,27 @@
      "Diagnosis_CSF_Ttau_t11": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 870, "high": 900 },
+       "range": { "low": 550, "high": 900 },
        "unit": "pg/ml",
        "remarks": [
 
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t11"
+    },
+    
+      "Diagnosis_FDG_PET_SUVR_t11": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.3, "high": 0.9 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t11"
     },
@@ -3890,7 +4088,7 @@
     "Diagnosis_CDR_SB_t12": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 13, "high": 18 },
+      "range": { "low": 10, "high": 18 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the CDR-SB scale found here: Clinical Dementia Rating – Sum of Boxes (CDR-SB). A clinical endpoint to measure cognitive changes in the early stages of Alzheimer’s disease"
@@ -3903,7 +4101,7 @@
     "Diagnosis_NPI_t12": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 50, "high": 80 },
+      "range": { "low": 70, "high": 140 },
       "unit": "{score}",
       "remarks": [
         "Thresholds for the NPI scale are calculated based on this equation: MMSE = 27.98 − 0.290 × NPI_Total_Score. Reference: 'Association Between Neuropsychiatric Symptom Trajectory and Conversion to Alzheimer Disease'. Tsz Wai Bentley Lo et al. (2020).For the Alzheimer’s Disease Neuroimaging Initiative"
@@ -3917,7 +4115,7 @@
      "Diagnosis_ADAS_Cog_11_t12": {
       "type": "Observation",
       "category": "survey",
-      "range": { "low": 50, "high": 70 },
+      "range": { "low": 35, "high": 70 },
       "unit": "{score}",
       "remarks": [
         
@@ -3943,7 +4141,7 @@
      "Diagnosis_CDR_t12": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 3},
+      "range": { "low": 2, "high": 3 },
       "unit": "{score}",
       "remarks": [
         
@@ -3972,13 +4170,27 @@
      "Diagnosis_CSF_Ttau_t12": {
        "type": "Observation",
        "category": "imaging",
-       "range": { "low": 870, "high": 900 },
+       "range": { "low": 550, "high": 900 },
        "unit": "pg/ml",
        "remarks": [
 
        ],
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
+       ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_t12"
+    },
+    
+      "Diagnosis_FDG_PET_SUVR_t12": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.3, "high": 0.9 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
        ],
        "direct_transition": "Diagnosis_MMSE_Score_Ethnicity_t12"
     },
@@ -4224,7 +4436,7 @@
      "Diagnosis_CDR_MCI": {
       "type": "Observation",
       "category": "survey",
-      "exact": {"quantity": 0.5},
+      "range": { "low": 0, "high": 0.5 },
       "unit": "{score}",
       "remarks": [
         
@@ -4261,6 +4473,20 @@
        "codes": [
         { "system": "LOINC", "code": "58463-1", "display": "CSF-TAU" }
        ],
+       "direct_transition": "Diagnosis_FDG_PET_SUVR_MCI"
+    },
+    
+      "Diagnosis_FDG_PET_SUVR_MCI": {
+       "type": "Observation",
+       "category": "imaging",
+       "range": { "low": 0.9, "high": 1.5 },
+       "unit": "{score}",
+       "remarks": [
+
+       ],
+       "codes": [
+        { "system": "LOINC", "code": "58463-1", "display": "FDG-PET SUVR" }
+       ],
        "direct_transition": "Diagnosis_MMSE_Score_MCI"
     },
        
@@ -4273,8 +4499,97 @@
      "codes": [
       { "system": "LOINC", "code": "72106-8", "display": "MMSE" }
       ],
-     "direct_transition": "MildDecline"
+     "direct_transition": "FirstPrescription_MCI"
    },
+   
+   "FirstPrescription_MCI": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "310436",
+          "display": "Galantamine 4 MG Oral Tablet"
+        }
+      ],
+      "direct_transition": "FirstPrescription_MCI2"
+    },
+    
+   
+    "FirstPrescription_MCI2": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "997223",
+          "display": "Donepezil hydrochloride 10 MG Oral Tablet"
+        }
+      ],
+      "direct_transition": "FirstPrescription_MCI3"
+    },
+    
+    
+    "FirstPrescription_MCI3": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "313185",
+          "display": "Tacrine 10 MG Oral Capsule"
+        }
+      ],
+      "direct_transition": "FirstPrescription_MCI4"
+    },
+    
+   
+     "FirstPrescription_MCI4": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "2608323",
+          "display": "Lecanemab 10 MG/Kg Injection"
+        }
+      ],
+      "direct_transition": "SecondPrescription_MCI"
+    },
+    
+     "SecondPrescription_MCI": {
+      "type": "MedicationOrder",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "996740",
+          "display": "Memantine hydrochloride 2 MG/ML Oral Solution"
+        }
+      ],
+      "direct_transition": "FirstPrescription_MCI5"
+    },
+    
+  
+     "FirstPrescription_MCI5": {
+      "type": "MedicationOrder",
+      "assign_to_attribute": "Alzheimer's Medication",
+      "reason": "Type of Alzheimer's",
+      "codes": [
+        {
+          "system": "RxNorm",
+          "code": "2608324",
+          "display": "Rivastigmina 1,5 MG oral"
+        }
+      ],
+      "direct_transition": "MildDecline"
+    },
+    
+  
 
   "MildDecline": {
       "type": "Delay",
